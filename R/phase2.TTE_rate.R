@@ -232,7 +232,7 @@
 ##' Wu, J, Chen L, Wei J, Weiss H, Chauhan A. (2020). Two-stage phase II survival trial design. Pharmaceutical Statistics. 2020;19:214-229. https://doi.org/10.1002/pst.1983
 
 
-phase2.TTE <- function(shape, S0, x0, hr, tf, rate, alpha, beta, prStop=0,
+phase2.TTE_rate <- function(shape, S0, x0, hr, tf, rate, alpha, beta, prStop=0,
 											q_value=0.5, dfc1=0.001, dfc2=0.001, dfc3=0.001,
 											maxEn=10000, range=1, t1_p1=0.2, t1_p2=1.2,
 											c1_p=0.25, nbpt_p=11, pascote_p=1.26, restricted=0) {
