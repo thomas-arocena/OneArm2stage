@@ -637,7 +637,7 @@ phase2.TTE_ta <- function(shape, S0, x0, hr, tf, ta, alpha, beta, prStop=0,
 			atc <- r[1, ]                              # pick the row with smallest n
 			if (atc$n < maxn) {
 				maxn <- atc$n                            # update upper limit of n, maxn to the smallest n in r
-				atc0 <- atc                              # update atc0, the (ta, r1, c1, n) w/ smallest n in this iteration
+				atc0 <- atc                              # update atc0, the (rate, r1, c1, n) w/ smallest n in this iteration
 			}
 		} else {
 			atc <- data.frame(rate = NA, r1 = NA, c1 = NA, n = NA,
@@ -1416,17 +1416,18 @@ phase2.TTE_ta <- function(shape, S0, x0, hr, tf, ta, alpha, beta, prStop=0,
 											prStop=prStop, restricted=restricted)
 
 	DESIGN <- list(param = param,
-								 Single_stage = Single_stage,
-								 Two_stage_Optimal = Two_stage_Optimal,
-								 Two_stage_minmax=Two_stage_minmax,
-								 Two_stage_Admissible=Two_stage_Admissible,
-								 difn_opSg=difn_opSg,
-								 difn_opminmax=difn_opminmax,
-								 minmax.err = minmax.err,
-								 optimal.err = optimal.err,
-								 admiss.err = admiss.err,
-								 admiss.null1 = admiss.null1,
-								 admiss.null2 = admiss.null2,
-								 admiss.null3 = admiss.null3)
+								 Single_stage = Single_stage
+								#  Two_stage_Optimal = Two_stage_Optimal,
+								#  Two_stage_minmax=Two_stage_minmax,
+								#  Two_stage_Admissible=Two_stage_Admissible,
+								#  difn_opSg=difn_opSg,
+								#  difn_opminmax=difn_opminmax,
+								#  minmax.err = minmax.err,
+								#  optimal.err = optimal.err,
+								#  admiss.err = admiss.err,
+								#  admiss.null1 = admiss.null1,
+								#  admiss.null2 = admiss.null2,
+								#  admiss.null3 = admiss.null3
+								)
 	return(DESIGN)
 }
