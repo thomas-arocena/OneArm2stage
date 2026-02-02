@@ -130,7 +130,7 @@
 ##' @export
 ##' @examples
 ##' # 1. An example when q_value=0.1, i.e, more importance is given to ES.
-##' # phase2.TTE(shape=0.5, S0=0.6, x0=3, hr=0.5, tf=1, rate=5,
+##' # phase2.TTE_rate(shape=0.5, S0=0.6, x0=3, hr=0.5, tf=1, rate=5,
 ##' # 					 alpha=0.05, beta=0.15, q_value=0.1, prStop=0, restricted=0)
 ##' # $param
 ##' #   shape  S0  hr alpha beta rate x0 tf q_value prStop restricted
@@ -180,7 +180,7 @@
 ##' # [1] 0
 ##'
 ##' # 2. An example when q_value=0.75, i.e., more importance is given to n.
-##' # phase2.TTE(shape=0.5, S0=0.6, x0=3, hr=0.5, tf=1, rate=5,
+##' # phase2.TTE_rate(shape=0.5, S0=0.6, x0=3, hr=0.5, tf=1, rate=5,
 ##' # alpha=0.05, beta=0.15, q_value=0.75, prStop=0, restricted=0)
 ##' # $param
 ##' #   shape  S0  hr alpha beta rate x0 tf q_value prStop restricted
@@ -230,7 +230,6 @@
 ##' # [1] 0
 ##' @references
 ##' Wu, J, Chen L, Wei J, Weiss H, Chauhan A. (2020). Two-stage phase II survival trial design. Pharmaceutical Statistics. 2020;19:214-229. https://doi.org/10.1002/pst.1983
-
 
 phase2.TTE_rate <- function(shape, S0, x0, hr, tf, rate, alpha, beta, prStop=0,
 											q_value=0.5, dfc1=0.001, dfc2=0.001, dfc3=0.001,
@@ -477,8 +476,8 @@ phase2.TTE_rate <- function(shape, S0, x0, hr, tf, rate, alpha, beta, prStop=0,
 
 	while (iter < nbmaxiter & diff(c1.lim)/nbpt > dfc2) {
 		iter <- iter + 1
-		cat("Calculating optimal results, iter=", iter, "&EnH0=", round(EnH0, 2),
-				"& Dc1/nbpt=", round(diff(c1.lim)/nbpt, 5), "\n", sep = "")
+		cat("Calculating optimal results, iter=", iter, " & EnH0=", round(EnH0, 2),
+				" & Dc1/nbpt=", round(diff(c1.lim)/nbpt, 5), "\n", sep = "")
 
 		if (iter%%2 == 0)
 			nbpt <- nbpt + 1
@@ -578,7 +577,7 @@ phase2.TTE_rate <- function(shape, S0, x0, hr, tf, rate, alpha, beta, prStop=0,
 
 	while (iter < nbmaxiter & diff(c1.lim)/nbpt > dfc1) {
 		iter <- iter + 1
-		cat("Calculating minmax results, iter=", iter, " & n=", maxn, "& Dc1/nbpt=", round(diff(c1.lim)/nbpt, 5), "\n", sep = "")
+		cat("Calculating minmax results, iter=", iter, " & n=", maxn, " & Dc1/nbpt=", round(diff(c1.lim)/nbpt, 5), "\n", sep = "")
 
 		if (iter%%2 == 0) nbpt <- nbpt + 1             # increase number of points to be checked within range
 
@@ -718,7 +717,7 @@ phase2.TTE_rate <- function(shape, S0, x0, hr, tf, rate, alpha, beta, prStop=0,
 
 			while (iter < nbmaxiter & diff(c1.lim)/nbpt > dfc3) {
 				iter <- iter + 1
-				cat("Calculating admissible results, n=", nvec[i], " & EnH0=", round(EnH0, 2), "& Dc1/nbpt=", round(diff(c1.lim)/nbpt, 5), "\n", sep = "")
+				cat("Calculating admissible results, n=", nvec[i], " & EnH0=", round(EnH0, 2), " & Dc1/nbpt=", round(diff(c1.lim)/nbpt, 5), "\n", sep = "")
 
 				if (iter%%2 == 0) nbpt <- nbpt + 1             # increase number of points to be checked within range
 
@@ -1047,8 +1046,8 @@ phase2.TTE_rate <- function(shape, S0, x0, hr, tf, rate, alpha, beta, prStop=0,
 
 	while (iter < nbmaxiter & diff(c1.lim)/nbpt > dfc2 ) {
 		iter <- iter + 1
-		cat("Calculating optimal results, iter=", iter, "&EnH0=", round(EnH0, 2),
-				"& Dc1/nbpt=", round(diff(c1.lim)/nbpt, 5), "\n", sep = "")
+		cat("Calculating optimal results, iter=", iter, " & EnH0=", round(EnH0, 2),
+				" & Dc1/nbpt=", round(diff(c1.lim)/nbpt, 5), "\n", sep = "")
 		if (iter%%2 == 0) nbpt <- nbpt + 1
 		# increase number of points to be checked within range
 		cote <- cote/pascote
@@ -1169,7 +1168,7 @@ phase2.TTE_rate <- function(shape, S0, x0, hr, tf, rate, alpha, beta, prStop=0,
 	while (iter < nbmaxiter & diff(c1.lim)/nbpt > dfc1) {
 		iter <- iter + 1
 		cat("Calculating minmax results, iter=", iter, " & n=", round(maxn, 2),
-				"& Dc1/nbpt=", round(diff(c1.lim)/nbpt, 5), "\n", sep = "")
+				" & Dc1/nbpt=", round(diff(c1.lim)/nbpt, 5), "\n", sep = "")
 
 		if (iter%%2 == 0) nbpt <- nbpt + 1
 		# increase number of points to be checked within range

@@ -67,7 +67,7 @@
 ##' \itemize{
 ##'           \item \emph{nsignle} the required sample size for the
 ##'           single-stage design.\cr
-##'           \item \emph{tasingle} the estimated accrual time for the single-stage
+##'           \item \emph{ratesingle} the estimated accrual rate for the single-stage
 ##'           design.\cr
 ##'          \item \emph{csingle} the critical value for the
 ##'          single-stage design.\cr
@@ -79,9 +79,8 @@
 ##'           design by the interim and final stage, respectively.\cr
 ##'          \item \emph{c1} and \emph{c} critical values in the two-stage
 ##'          design for interim and final analysis, respectively.\cr
-##'          \item \emph{r1} the interim analysis time in the two-stage design.\cr
-##'          \item \emph{MTSL} the maximum total study length (the sum of the accrual
-##'          time and the follow-up time).\cr
+##'          \item \emph{r1} the interim analysis rate in the two-stage design.\cr
+##'          \item \emph{rate} the accrual rate.\cr
 ##'          \item \emph{ES} the expected sample size under null in the two-stage
 ##'           design.\cr
 ##'          \item \emph{PS} the probability of early stopping under null in the
@@ -130,107 +129,97 @@
 ##' @export
 ##' @examples
 ##' # 1. An example when q_value=0.1, i.e, more importance is given to ES.
-##' # phase2.TTE(shape=0.5, S0=0.6, x0=3, hr=0.5, tf=1, rate=5,
-##' # 					 alpha=0.05, beta=0.15, q_value=0.1, prStop=0, restricted=0)
-##' # $param
-##' #   shape  S0  hr alpha beta rate x0 tf q_value prStop restricted
-##' # 1   0.5 0.6 0.5  0.05 0.15    5  3  1     0.1      0          0
-##' #
-##' # $Single_stage
-##' #   nsingle tasingle  csingle
-##' # 1      45        9 1.644854
-##' #
-##' # $Two_stage_Optimal
-##' #   n1     c1  n      c     r1 MTSL    ES     PS
-##' # 1 29 0.1389 48 1.6159 5.7421 10.6 37.29 0.5552
-##' #
-##' # $Two_stage_minmax
-##' #   n1     c1  n      c     r1 MTSL      ES     PS
-##' # 1 34 0.1151 45 1.6391 6.7952   10 38.9831 0.5458
-##' #
-##' # $Two_stage_Admissible
-##' #      n1      c1  n      c     r1 MTSL      ES     PS      Rho
-##' # 123  29  0.0705 47 1.6232 5.7261 10.4 37.2993 0.5281 38.26937
-##' # 285  28  0.0792 48 1.6171 5.5663 10.6 37.2790 0.5316 38.35110
-##' # 1701 31  0.0733 46 1.6293 6.0191 10.2 37.5828 0.5292 38.42452
-##' # 170  33 -0.0405 45 1.6391 6.4245 10.0 38.7692 0.4839 39.39228
-##' #
-##' # $difn_opSg
-##' # [1] 3
-##' #
-##' # $difn_opminmax
-##' # [1] 3
-##' #
-##' # $minmax.err
-##' # [1] 0
-##' #
-##' # $optimal.err
-##' # [1] 0
-##' #
-##' # $admiss.err
-##' # [1] 0
-##' #
-##' # $admiss.null1
-##' # [1] 0
-##' #
-##' # $admiss.null2
-##' # [1] 0
-##' #
-##' # $admiss.null3
-##' # [1] 0
+##' # phase2.TTE_ta(shape=0.5, S0=0.6, x0=3, hr=0.5, tf=3, ta=3, alpha=0.05,
+##' # beta=0.15, q_value=0.1, prStop=0, restricted=0)
+##'	# $param
+##'	# 	shape  S0  hr alpha beta ta x0 tf q_value prStop restricted
+##'	# 1   0.5 0.6 0.5  0.05 0.15  3  3  3     0.1      0          0
 ##'
+##'	# $Single_stage
+##'	# 	nsingle ratesingle  csingle
+##'	# 1      47         16 1.644854
+##'
+##'	# $Two_stage_Optimal
+##'	# 	n1    c1  n      c  r1    rate ES     PS
+##'	# 1 10 -0.75 47 1.6446 3.2 15.6667 47 0.2266
+##'
+##'	# $Two_stage_minmax
+##'	# 	n1    c1  n      c  r1    rate ES     PS
+##'	# 1 10 -0.75 47 1.6446 3.2 15.6667 47 0.2266
+##'
+##'	# $Two_stage_Admissible
+##'	# NULL
+##'
+##'	# $difn_opSg
+##'	# [1] 0
+##'
+##'	# $difn_opminmax
+##'	# [1] 0
+##'
+##'	# $minmax.err
+##'	# [1] 0
+##'
+##'	# $optimal.err
+##'	# [1] 0
+##'
+##'	# $admiss.err
+##'	# [1] 0
+##'
+##'	# $admiss.null1
+##'	# [1] 0
+##'
+##'	# $admiss.null2
+##'	# [1] 0
+##'
+##'	# $admiss.null3
+##'	# [1] 1
 ##' # 2. An example when q_value=0.75, i.e., more importance is given to n.
-##' # phase2.TTE(shape=0.5, S0=0.6, x0=3, hr=0.5, tf=1, rate=5,
-##' # alpha=0.05, beta=0.15, q_value=0.75, prStop=0, restricted=0)
-##' # $param
-##' #   shape  S0  hr alpha beta rate x0 tf q_value prStop restricted
-##' # 1   0.5 0.6 0.5  0.05 0.15    5  3  1    0.75      0          0
-##' #
-##' # $Single_stage
-##' #   nsingle tasingle  csingle
-##' # 1      45        9 1.644854
-##' #
-##' # $Two_stage_Optimal
-##' #   n1     c1  n      c     r1 MTSL    ES     PS
-##' # 1 29 0.1389 48 1.6159 5.7421 10.6 37.29 0.5552
-##' #
-##' # $Two_stage_minmax
-##' #   n1     c1  n      c     r1 MTSL      ES     PS
-##' # 1 34 0.1151 45 1.6391 6.7952   10 38.9831 0.5458
-##' #
-##' # $Two_stage_Admissible
-##' #      n1      c1  n      c     r1 MTSL      ES     PS      Rho
-##' # 170  33 -0.0405 45 1.6391 6.4245 10.0 38.7692 0.4839 43.44230
-##' # 1701 31  0.0733 46 1.6293 6.0191 10.2 37.5828 0.5292 43.89570
-##' # 123  29  0.0705 47 1.6232 5.7261 10.4 37.2993 0.5281 44.57483
-##' # 285  28  0.0792 48 1.6171 5.5663 10.6 37.2790 0.5316 45.31975
-##' #
-##' # $difn_opSg
-##' # [1] 3
-##' #
-##' # $difn_opminmax
-##' # [1] 3
-##' #
-##' # $minmax.err
-##' # [1] 0
-##' #
-##' # $optimal.err
-##' # [1] 0
-##' #
-##' # $admiss.err
-##' # [1] 0
-##' #
-##' # $admiss.null1
-##' # [1] 0
-##' #
-##' # $admiss.null2
-##' # [1] 0
-##' #
-##' # $admiss.null3
-##' # [1] 0
+##'	# phase2.TTE_ta(shape=0.5, S0=0.6, x0=3, hr=0.5, tf=3, ta=3, alpha=0.05, 
+##'	# 	beta=0.15, q_value=0.75, prStop=0, restricted=0)
+##'	# $param
+##'	# 	shape  S0  hr alpha beta ta x0 tf q_value prStop restricted
+##'	# 1   0.5 0.6 0.5  0.05 0.15  3  3  3    0.75      0          0
+##'
+##'	# $Single_stage
+##'	# 	nsingle ratesingle  csingle
+##'	# 1      47         16 1.644854
+##'
+##'	# $Two_stage_Optimal
+##'	# 	n1    c1  n      c  r1    rate ES     PS
+##'	# 1 10 -0.75 47 1.6446 3.2 15.6667 47 0.2266
+##'
+##'	# $Two_stage_minmax
+##'	# 	n1    c1  n      c  r1    rate ES     PS
+##'	# 1 10 -0.75 47 1.6446 3.2 15.6667 47 0.2266
+##'
+##'	# $Two_stage_Admissible
+##'	# NULL
+##'
+##'	# $difn_opSg
+##'	# [1] 0
+##'
+##'	# $difn_opminmax
+##'	# [1] 0
+##'
+##'	# $minmax.err
+##'	# [1] 0
+##'
+##'	# $optimal.err
+##'	# [1] 0
+##'
+##'	# $admiss.err
+##'	# [1] 0
+##'
+##'	# $admiss.null1
+##'	# [1] 0
+##'
+##'	# $admiss.null2
+##'	# [1] 0
+##'
+##'	# $admiss.null3
+##'	# [1] 1
 ##' @references
 ##' Wu, J, Chen L, Wei J, Weiss H, Chauhan A. (2020). Two-stage phase II survival trial design. Pharmaceutical Statistics. 2020;19:214-229. https://doi.org/10.1002/pst.1983
-
 
 phase2.TTE_ta <- function(shape, S0, x0, hr, tf, ta, alpha, beta, prStop=0,
 											q_value=0.5, dfc1=0.001, dfc2=0.001, dfc3=0.001,
@@ -477,8 +466,8 @@ phase2.TTE_ta <- function(shape, S0, x0, hr, tf, ta, alpha, beta, prStop=0,
 
 	while (iter < nbmaxiter & diff(c1.lim)/nbpt > dfc2) {
 		iter <- iter + 1
-		cat("Calculating optimal results, iter=", iter, "&EnH0=", round(EnH0, 2),
-				"& Dc1/nbpt=", round(diff(c1.lim)/nbpt, 5), "\n", sep = "")
+		cat("Calculating optimal results, iter=", iter, " & EnH0=", round(EnH0, 2),
+				" & Dc1/nbpt=", round(diff(c1.lim)/nbpt, 5), "\n", sep = "")
 
 		if (iter%%2 == 0)
 			nbpt <- nbpt + 1
@@ -578,7 +567,7 @@ phase2.TTE_ta <- function(shape, S0, x0, hr, tf, ta, alpha, beta, prStop=0,
 
 	while (iter < nbmaxiter & diff(c1.lim)/nbpt > dfc1) {
 		iter <- iter + 1
-		cat("Calculating minmax results, iter=", iter, " & n=", maxn, "& Dc1/nbpt=", round(diff(c1.lim)/nbpt, 5), "\n", sep = "")
+		cat("Calculating minmax results, iter=", iter, " & n=", maxn, " & Dc1/nbpt=", round(diff(c1.lim)/nbpt, 5), "\n", sep = "")
 
 		if (iter%%2 == 0) nbpt <- nbpt + 1             # increase number of points to be checked within range
 
@@ -718,7 +707,7 @@ phase2.TTE_ta <- function(shape, S0, x0, hr, tf, ta, alpha, beta, prStop=0,
 
 			while (iter < nbmaxiter & diff(c1.lim)/nbpt > dfc3) {
 				iter <- iter + 1
-				cat("Calculating admissible results, n=", nvec[i], " & EnH0=", round(EnH0, 2), "& Dc1/nbpt=", round(diff(c1.lim)/nbpt, 5), "\n", sep = "")
+				cat("Calculating admissible results, n=", nvec[i], " & EnH0=", round(EnH0, 2), " & Dc1/nbpt=", round(diff(c1.lim)/nbpt, 5), "\n", sep = "")
 
 				if (iter%%2 == 0) nbpt <- nbpt + 1             # increase number of points to be checked within range
 
@@ -1047,8 +1036,8 @@ phase2.TTE_ta <- function(shape, S0, x0, hr, tf, ta, alpha, beta, prStop=0,
 
 	while (iter < nbmaxiter & diff(c1.lim)/nbpt > dfc2 ) {
 		iter <- iter + 1
-		cat("Calculating optimal results, iter=", iter, "&EnH0=", round(EnH0, 2),
-				"& Dc1/nbpt=", round(diff(c1.lim)/nbpt, 5), "\n", sep = "")
+		cat("Calculating optimal results, iter=", iter, " & EnH0=", round(EnH0, 2),
+				" & Dc1/nbpt=", round(diff(c1.lim)/nbpt, 5), "\n", sep = "")
 		if (iter%%2 == 0) nbpt <- nbpt + 1
 		# increase number of points to be checked within range
 		cote <- cote/pascote
@@ -1169,7 +1158,7 @@ phase2.TTE_ta <- function(shape, S0, x0, hr, tf, ta, alpha, beta, prStop=0,
 	while (iter < nbmaxiter & diff(c1.lim)/nbpt > dfc1) {
 		iter <- iter + 1
 		cat("Calculating minmax results, iter=", iter, " & n=", round(maxn, 2),
-				"& Dc1/nbpt=", round(diff(c1.lim)/nbpt, 5), "\n", sep = "")
+				" & Dc1/nbpt=", round(diff(c1.lim)/nbpt, 5), "\n", sep = "")
 
 		if (iter%%2 == 0) nbpt <- nbpt + 1
 		# increase number of points to be checked within range
@@ -1308,7 +1297,7 @@ phase2.TTE_ta <- function(shape, S0, x0, hr, tf, ta, alpha, beta, prStop=0,
 			while (iter < nbmaxiter & diff(c1.lim)/nbpt > dfc3) {
 				iter <- iter + 1
 				cat("Calculating admissible results, n=", nvec[i], " & EnH0=",
-						round(EnH0,2), "& Dc1/nbpt=", round(diff(c1.lim)/nbpt, 5),
+						round(EnH0,2), " & Dc1/nbpt=", round(diff(c1.lim)/nbpt, 5),
 						"\n", sep = "")
 
 				if (iter%%2 == 0) nbpt <- nbpt + 1
